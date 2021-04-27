@@ -50,24 +50,24 @@ function startMenuMenu() {
       break;
       
     // Add
-      // switch (response.type) {
-      //   case 'Employees':
-      //     newEmployee();
-      //     break;
+      switch (response.type) {
+        case 'Employees':
+          newEmployee();
+          break;
 
-      //   case 'Role':
-      //     newRole();
-      //     break;
+        case 'Role':
+          newRole();
+          break;
 
-      //   case 'Department':
-      //     newDepartment();
-      //     break;
+        case 'Department':
+          newDepartment();
+          break;
 
-      //   case 'Edit':
-      //     Edit();
-      //     break;
-      // }
-      // break;
+        case 'Edit':
+          Edit();
+          break;
+      }
+      break;
 
     });
   connection.end()
@@ -95,6 +95,78 @@ function viewDepartment() {
     console.table(res);
     startMenu();
   });
+};
+
+function newEmployee() {
+  inquirer
+    .prompt([
+      {
+        name: 'firstName',
+        type: 'input',
+        message: 'Enter employee first name',
+      },
+      {
+        name: 'lastname',
+        type: 'input',
+        message: 'Enter employee last name',
+      },
+    ])
+    .then(function (response) {
+      connection.query('INSERT INTO employee SET ?', {
+        first_name: response.firstName,
+        last_name: response.lastName,
+      },
+        (err, res) => {
+          if (err) throw err;
+          console.table(res);
+          startMenu();
+        });
+    });
+};
+
+function newRole() {
+  inquirer
+    .prompt([
+      {
+        name: 'title',
+        type: 'input',
+        message: 'Enter the title for this role.'
+      },
+      {
+        name: 'salary',
+        type: 'input',
+        message: 'Enter the salary for this role.'
+      }
+    ]).then(response => {
+      connection.query('INSERT INTO role SET ?', {
+        title: response.title,
+        salary: response.salary,
+      },
+        (err, res) => {
+          if (err) throw err;
+          console.table(res);
+          startMenu();
+        })
+    });
+};
+
+function newDepartment() {
+  inquirer
+    .prompt([
+      {
+        name: 'departmentName',
+        type: 'input',
+        message: 'Enter the name for the department.'
+      }
+    ]).then(response => {
+      connection.query('INSERT INTO department SET ?', {
+        name: response.departmentName
+      }, (err, res) => {
+        if (err) throw err;
+        console.table(res);
+        startMenu();
+      })
+    });
 };
 
 
